@@ -1,0 +1,161 @@
+Option Explicit
+
+Private Const DIGITO_CPF = 11
+Private Const DIGITO_CNPJ = 14
+Private Const DIGITO_TITULO = 12
+
+'----------------------------------------------------------------------------------------------------------
+' CPF
+'----------------------------------------------------------------------------------------------------------
+
+Public Function CPF_Formatar(numCPF As String) As String
+        
+    numCPF = ManterNumero(numCPF)
+    
+    If Len(numCPF) < DIGITO_CPF Then numCPF = String(DIGITO_CPF - Len(numCPF), "0") & numCPF
+    
+    CPF_Formatar = Left(numCPF, 3) & "." & Mid(numCPF, 4, 3) & "." & Mid(numCPF, 7, 3) & "-" & Right(numCPF, 2)
+  
+End Function
+
+Public Function CPF_Valido(numCPF As String) As Boolean
+
+    Dim caracter As Integer
+    Dim DV1 As Integer
+    Dim DV2 As Integer
+    
+    CPF_Valido = False
+    
+    numCPF = ManterNumero(numCPF)
+                    
+    If Len(numCPF) < DIGITO_CPF Then numCPF = String(DIGITO_CPF - Len(numCPF), "0") & numCPF
+    
+    DV1 = 0
+    DV2 = 0
+
+    For caracter = 1 To 9
+         DV1 = Val(Mid(numCPF, caracter, 1)) * caracter + DV1
+         If caracter > 1 Then DV2 = Val(Mid(numCPF, caracter, 1)) * (caracter - 1) + DV2
+    Next
+    DV1 = Right(DV1 Mod 11, 1)
+    DV2 = Right((DV2 + (DV1 * 9)) Mod 11, 1)
+    
+    If Mid(numCPF, DIGITO_CPF - 1, 1) = DV1 And Mid(numCPF, DIGITO_CPF, 1) = DV2 Then CPF_Valido = True
+    
+    
+End Function
+
+'----------------------------------------------------------------------------------------------------------
+' CNPJ
+'----------------------------------------------------------------------------------------------------------
+
+Public Function CNPJ_Formatar(numCNPJ As String) As String
+        
+    numCNPJ = ManterNumero(numCNPJ)
+    
+    If Len(numCNPJ) < DIGITO_CNPJ Then numCNPJ = String(DIGITO_CNPJ - Len(numCNPJ), "0") & numCNPJ
+    
+    CNPJ_Formatar = Left(numCNPJ, 2) & "." & Mid(numCNPJ, 3, 3) & "." & Mid(numCNPJ, 6, 3) & "/" & _
+        Mid(numCNPJ, 9, 4) & "-" & Right(numCNPJ, 2)
+  
+End Function
+
+Public Function CNPJ_Valido(numCNPJ As String) As Boolean
+
+    Dim caracter As Integer
+    Dim DV1 As Integer
+    Dim DV2 As Integer
+    Dim MULT_CNPJ_DV1 As Variant
+    Dim MULT_CNPJ_DV2   As Variant
+        
+    CNPJ_Valido = False
+    
+    MULT_CNPJ_DV1 = Array(6, 7, 8, 9, 2, 3, 4, 5, 6, 7, 8, 9)
+    MULT_CNPJ_DV2 = Array(5, 6, 7, 8, 9, 2, 3, 4, 5, 6, 7, 8, 9)
+    
+    numCNPJ = ManterNumero(numCNPJ)
+                    
+    If Len(numCNPJ) < 14 Then numCNPJ = String(14 - Len(numCNPJ), "0") & numCNPJ
+    
+    DV1 = 0
+    DV2 = 0
+
+    For caracter = LBound(MULT_CNPJ_DV1) To UBound(MULT_CNPJ_DV1)
+         DV1 = Val(Mid(numCNPJ, caracter + 1, 1)) * MULT_CNPJ_DV1(caracter) + DV1
+    Next
+    
+    For caracter = LBound(MULT_CNPJ_DV2) To UBound(MULT_CNPJ_DV2)
+         DV2 = Val(Mid(numCNPJ, caracter + 1, 1)) * MULT_CNPJ_DV2(caracter) + DV2
+    Next
+    
+    DV1 = Right(DV1 Mod 11, 1)
+    DV2 = Right(DV2 Mod 11, 1)
+    
+    If Mid(numCNPJ, DIGITO_CNPJ - 1, 1) = DV1 And Mid(numCNPJ, DIGITO_CNPJ, 1) = DV2 Then CNPJ_Valido = True
+        
+    
+End Function
+
+'----------------------------------------------------------------------------------------------------------
+' TÍTULO ELEITORAL
+'----------------------------------------------------------------------------------------------------------
+
+Public Function Titulo_Formatar(numTitulo As String) As String
+        
+    numTitulo = ManterNumero(numTitulo)
+    
+    If Len(numTitulo) < DIGITO_TITULO Then numTitulo = String(DIGITO_TITULO - Len(numTitulo), "0") & numTitulo
+    
+    Titulo_Formatar = Left(numTitulo, 4) & " " & Mid(numTitulo, 5, 4) & " " & Mid(numTitulo, 9, 4)
+    
+End Function
+
+Public Function Titulo_Valido(numTitulo As String) As Boolean
+
+    Dim caracter As Integer
+    Dim DV1 As Integer
+    Dim DV2 As Integer
+    
+    Titulo_Valido = False
+    
+    numTitulo = ManterNumero(numTitulo)
+                    
+    If Len(numTitulo) < DIGITO_TITULO Then numTitulo = String(DIGITO_TITULO - Len(numTitulo), "0") & numTitulo
+    
+    DV1 = 0
+    DV2 = 0
+
+    For caracter = 1 To 8
+         DV1 = Val(Mid(numTitulo, caracter, 1)) * (caracter + 1) + DV1
+      '   If caracter > 1 Then DV2 = Val(Mid(numTitulo, caracter, 1)) * (caracter - 1) + DV2
+    Next
+    
+    For caracter = 9 To 10
+         DV2 = Val(Mid(numTitulo, caracter, 1)) * (caracter - 2) + DV2
+    Next
+    
+    DV1 = Right(DV1 Mod 11, 1)
+    DV2 = Right((DV2 + (DV1 * 9)) Mod 11, 1)
+    
+    If Mid(numTitulo, DIGITO_TITULO - 1, 1) = DV1 And Mid(numTitulo, DIGITO_TITULO, 1) = DV2 Then Titulo_Valido = True
+                
+End Function
+
+'----------------------------------------------------------------------------------------------------------
+' função para retirar caracter não numérico da string
+'----------------------------------------------------------------------------------------------------------
+
+Private Function ManterNumero(Text As String) As String
+    
+    Dim i As Integer, j As String
+    
+    For i = 1 To Len(Text)
+        If Asc(Mid(Text, i, 1)) < 48 Or _
+           Asc(Mid(Text, i, 1)) > 57 Then
+        Else
+            j = j & Mid(Text, i, 1)
+        End If
+        ManterNumero = j
+    Next
+    
+End Function

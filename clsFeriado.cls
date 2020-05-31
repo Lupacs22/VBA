@@ -22,19 +22,19 @@ Private Sub Class_Initialize()
 
     Set FeriadosSalvos = CreateObject("scripting.dictionary")
     
-    FeriadosSalvos.Add "Confraternização", "01/01"
+    FeriadosSalvos.Add "ConfraternizaÃ§Ã£o", "01/01"
     FeriadosSalvos.Add "Aniversario", "25/01"
     FeriadosSalvos.Add "Tiradentes", "21/04"
     FeriadosSalvos.Add "Trabalho", "01/05"
     FeriadosSalvos.Add "Constitucionalista", "09/09"
-    FeriadosSalvos.Add "Independência", "07/09"
+    FeriadosSalvos.Add "IndependÃªncia", "07/09"
     FeriadosSalvos.Add "Aparecida", "12/10"
     FeriadosSalvos.Add "Finados", "02/11"
-    FeriadosSalvos.Add "República", "15/11"
-    FeriadosSalvos.Add "Consciência", "20/11"
-    FeriadosSalvos.Add "Preparação", "23/12"
+    FeriadosSalvos.Add "RepÃºblica", "15/11"
+    FeriadosSalvos.Add "ConsciÃªncia", "20/11"
+    FeriadosSalvos.Add "PreparaÃ§Ã£o", "23/12"
     FeriadosSalvos.Add "Natal", "25/12"
-    FeriadosSalvos.Add "Último", "31/12"
+    FeriadosSalvos.Add "Ãšltimo", "31/12"
     
 End Sub
 
@@ -62,20 +62,20 @@ Public Function proximoDiaUtil(ByVal DataAtual As Date, Optional ByVal quantidad
     
 End Function
 
-Public Function tipoDia(Data As Date) As enTipodia
-    ' 0 - Dia útil | 1 - Fim de semana | 2 - Feriado
+Public Function tipoDia(Data As Date) As Integer
+    ' 0 - Dia Ãºtil | 1 - Fim de semana | 2 - Feriado
     
     Dim key As Variant
     Dim Dia As Integer, Mes As Integer
         
-    ' Determina se é fim de semana
+    ' Determina se Ã© fim de semana
     If Application.WorksheetFunction.Weekday(CDate(Data)) = 1 Or _
     Application.WorksheetFunction.Weekday(CDate(Data)) = 7 Then
         tipoDia = 1
         Exit Function
     End If
     
-    ' Determina se é feriado
+    ' Determina se Ã© feriado
     For Each key In FeriadosSalvos.Keys
         Dia = Split(FeriadosSalvos(key), "/")(0)
         Mes = Split(FeriadosSalvos(key), "/")(1)
@@ -85,7 +85,7 @@ Public Function tipoDia(Data As Date) As enTipodia
         End If
     Next key
     
-    ' Retorna dia útil
+    ' Retorna dia Ãºtil
     tipoDia = 0
     
 End Function
